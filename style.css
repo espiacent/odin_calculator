@@ -1,0 +1,61 @@
+@import "normalise.css";
+
+.calculator {
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.2rem;
+    border: 5px solid black;
+    background: black;
+
+    position: fixed;
+    width: 45vh;
+    height: 70vh;
+    margin: 5% auto;
+    /* Will not center vertically and won't work in IE6/7. */
+    left: 0;
+    right: 0;   
+}
+.textfield {
+    position: relative;
+    padding: 3vh;
+}
+
+.span2col {
+    grid-column: span 2;
+}
+
+.span4col {
+    grid-column: span 4;
+}
+
+button {
+    border: 0.1rem solid black;
+    border-radius: 50%;
+    background: hsl(0, 0%, 41%);
+    color: white;
+    font-size: 2rem;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+.orange {
+background: #ff9e0b
+}
+
+.dark {
+ background: #383838
+}
+
+.notround {
+    border-radius: 36px;
+}
+
+.output {
+    padding: 1vh;
+    color: white;
+    font-size: 3.5rem;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
