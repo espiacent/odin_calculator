@@ -37,6 +37,12 @@ button {
     text-align: center;
     align-items: center;
     align-content: center;
+    transition: filter 0.25s;
+    transition-timing-function: ease-out;
+}
+
+button:active {
+filter: brightness(130%);
 }
 
 .orange {
