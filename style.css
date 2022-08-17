@@ -45,8 +45,15 @@ button {
     align-content: center;
     transition: filter 0.25s;
     transition-timing-function: ease-out;
+    
 }
 
+button:focus {
+    outline: none;
+}
+
+/* change to javascript and also get for key input (add to get functions!
+--> on key or click get id and add hl class to button */
 button:active {
 filter: brightness(130%);
 }

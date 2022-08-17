@@ -1,5 +1,5 @@
 // global variables
-window.output = '';
+window.value = '';
 window.op = '';
 window.num1 = '';
 window.num2 = '';
@@ -58,44 +58,51 @@ function getKey(e) {
     if (e.key in numberkeys) {
         return fillDisplay(e.key);
     } else {
-        if (e.key == 'Backspace' || 'c') {
-            window.output = '0';
-        }
-        if (e.key == '/') {
-            return ('divide');
-        }
-        if (e.key == '%') {
-            return ('percent');
-        }
-        if (e.key == '+') {
-            return ('plus');
-        }
-        if (e.key == '-') {
-            return ('minus');
-        }
-        if (e.key == '*') {
-            return ('mult');
-        }
-        if (e.key == '=') {
-            return ('equals');
-        }
-        if (e.key == ',') {
-            return ('comma');
-        }
+        return;
+        // if (e.key == 'Backspace' || 'c') {
+        //     return fillDisplay('clear');
+        // }
+        // if (e.key == '/') {
+        //     console.log('divide');
+        // }
+        // if (e.key == '%') {
+        //     console.log('percent');
+        // }
+        // if (e.key == '+') {
+        //     console.log('plus');
+        // }
+        // if (e.key == '-') {
+        //     console.log('minus');
+        // }
+        // if (e.key == '*') {
+        //     console.log('mult');
+        // }
+        // if (e.key == '=') {
+        //     console.log('equals');
+        // }
+        // if (e.key == ',') {
+        //     console.log('comma');
+        // }
     }
 }
 
 function getButton(e) {
     const position = (document.elementFromPoint(e.clientX, e.clientY));
     const button = position.id;
-    return fillDisplay(position.id);
+    fillDisplay(position.id);
+    return;
 }
 
 function fillDisplay(value) {
     const onlyInclude = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
     if (value in onlyInclude) {
-        window.output = `${value}`;
+        window.value += value;
         const display = document.querySelector('.output');
-        display.textContent = `${window.output}`;
-    } else return;
+        display.textContent = `${window.value}`;
+        // clear maybe own function    
+    } if (value == 'clear') {
+        window.value = '';
+        const display = document.querySelector('.output');
+        display.textContent = '0';
+    } else { return; }
 }
