@@ -4,26 +4,84 @@ window.op = '';
 window.num1 = '';
 window.num2 = '';
 
-// main operate function
-function Op(op, num1, num2) {
-    if (op == 'plus') {
-        return Add(num1, num2);
+// event listeners
+const buttons = Array.from(document.querySelectorAll('.button'));
+buttons.forEach(button => button.addEventListener('click', getClick));
+document.addEventListener('keydown', getKey);
+
+//input functions
+// 1: Button
+function getKey(e) {
+    return;
+}
+
+// 2: Click
+function getClick(e) {
+    // set Clear Button
+    const clearButton = document.getElementById('clear');
+    clearButton.textContent = 'C';
+    // define arrays for check input
+    const numberKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const calcKeys = ['plus', 'minus', 'mult', 'divide', 'equals'];
+    const otherKeys = ['percent', 'clear', 'neg', 'comma'];
+    const position = (document.elementFromPoint(e.clientX, e.clientY));
+    const buttonValue = position.id;
+    // split inputs in three categories (numbers, operators, other) with subcategories for all inputs
+    if (buttonValue in numberKeys) {
+        fillDisplayNum(buttonValue);
+    } if (calcKeys.includes(buttonValue)) {
+        return;
+    } if (otherKeys.includes(buttonValue)) {
+        switch (buttonValue) {
+            case 'clear':
+                clearOutput();
+                break;
+            case 'comma':
+                break;
+            default:
+                return;
+        }
+    } else {
+        return;
     }
-    if (op == 'minus') {
-        return Sub(num1, num2);
+}
+
+// output field function
+function fillDisplayNum(buttonValue) {
+    // add value to global number variable
+    window.value += buttonValue;
+    // limit number length in output field so there is no overlay
+    let checkLength = window.value;
+    if (checkLength.length > 10) {
+        return;
     }
-    if (op == 'mult') {
-        return Mult(num1, num2);
+    // check for double leading zero and remove if necessary
+    let floatNum = parseFloat(window.value);
+    if (floatNum % 1 == 0) {
+        floatNum.toFixed(0);
+        window.value = floatNum;
+    } else {
+        floatNum.toFixed(1);
+        window.value = floatNum;
     }
-    if (op == "divide") {
-        return Div(num1, num2);
-    }
-    if (op == "neg") {
-        return Neg(num1)
-    }
-    if (op == "clear") {
-        return Clear()
-    }
+    // new global variable to output
+    const display = document.querySelector('.output');
+    display.textContent = `${window.value}`;
+}
+
+// function to clear output field
+function clearOutput() {
+    // clear all global variables
+    window.value = '0';
+    window.op = '';
+    window.num1 = '';
+    window.num2 = '';
+    //clear output field
+    const display = document.querySelector('.output');
+    display.textContent = `${window.value}`;
+    // reset Clear Button
+    const clearButton = document.getElementById('clear');
+    clearButton.textContent = 'AC';
 }
 
 // calculation functions
@@ -45,64 +103,4 @@ function Div(num1, num2) {
 
 function Neg(num1) {
     return (num1 * -1);
-}
-
-// event listeners
-const buttons = Array.from(document.querySelectorAll('.button'));
-buttons.forEach(button => button.addEventListener('click', getButton));
-document.addEventListener('keydown', getKey);
-
-//input functions
-function getKey(e) {
-    const numberkeys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-    if (e.key in numberkeys) {
-        return fillDisplay(e.key);
-    } else {
-        return;
-        // if (e.key == 'Backspace' || 'c') {
-        //     return fillDisplay('clear');
-        // }
-        // if (e.key == '/') {
-        //     console.log('divide');
-        // }
-        // if (e.key == '%') {
-        //     console.log('percent');
-        // }
-        // if (e.key == '+') {
-        //     console.log('plus');
-        // }
-        // if (e.key == '-') {
-        //     console.log('minus');
-        // }
-        // if (e.key == '*') {
-        //     console.log('mult');
-        // }
-        // if (e.key == '=') {
-        //     console.log('equals');
-        // }
-        // if (e.key == ',') {
-        //     console.log('comma');
-        // }
-    }
-}
-
-function getButton(e) {
-    const position = (document.elementFromPoint(e.clientX, e.clientY));
-    const button = position.id;
-    fillDisplay(position.id);
-    return;
-}
-
-function fillDisplay(value) {
-    const onlyInclude = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-    if (value in onlyInclude) {
-        window.value += value;
-        const display = document.querySelector('.output');
-        display.textContent = `${window.value}`;
-        // clear maybe own function    
-    } if (value == 'clear') {
-        window.value = '';
-        const display = document.querySelector('.output');
-        display.textContent = '0';
-    } else { return; }
 }
