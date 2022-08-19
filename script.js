@@ -2,7 +2,7 @@
 window.currentValue = '';
 window.cachedValue = '';
 window.operator = '';
-// window.secondOperation = false;
+window.equals = false;
 
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
@@ -29,17 +29,39 @@ function getClick(e) {
     const buttonValue = position.id;
     // split inputs in three categories (numbers, operators, other) with subcategories for all inputs
     if (numbKeys.includes(buttonValue)) {
-        fillDisplayNum(buttonValue);
+        if (window.equals == true) {
+            window.currentValue = '';
+            window.cachedValue = '';
+            window.operator = '';
+            window.equals = false;
+            fillDisplayNum(buttonValue);
+        } else {
+            fillDisplayNum(buttonValue);
+        }
     } if (calcKeys.includes(buttonValue)) {
         switch (buttonValue) {
             case 'plus':
-                console.log('plus')
-                window.operator = 'plus';
-                window.cachedValue = window.currentValue;
-                window.currentValue = '';
+                if (cachedValue == '') {
+                    console.log('plus')
+                    window.operator = 'plus';
+                    window.cachedValue = window.currentValue;
+                    window.currentValue = '';
+                }
+                else {
+                    console.log('plus second')
+                    window.operator = 'plus';
+                    num1 = parseFloat(window.cachedValue)
+                    num2 = parseFloat(window.currentValue)
+                    sum = num1 + num2
+                    result = sum.toFixed();
+                    const display = document.querySelector('.output');
+                    display.textContent = result;
+                    window.cachedValue = window.currentValue;
+                }
                 break;
             case 'equals':
                 console.log('equals')
+                window.equals = true;
                 mainOperator(window.operator, window.cachedValue, window.currentValue);
                 break;
             default:
@@ -89,6 +111,7 @@ function clearOutput() {
     window.currentValue = '0';
     window.cachedValue = '';
     window.operator = '';
+    window.equals = false;
     // window.secondOperation = false;
     //clear output field
     const display = document.querySelector('.output');
@@ -114,7 +137,7 @@ function Add(num1, num2) {
     console.log('adding')
     window.currentValue = result;
     const display = document.querySelector('.output');
-    display.textContent = `${window.currentValue}`;
+    display.textContent = result;
 }
 
 function Sub(num1, num2) {

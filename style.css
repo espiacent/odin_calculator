@@ -1,80 +1,79 @@
-@import "normalise.css";
+@import 'normalise.css';
 
 body {
-    background:hsl(0, 0%, 76%);
+	background: hsl(0, 0%, 76%);
 }
 
 .calculator {
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.2rem;
-    border: 5px solid black;
-    background: black;
-    padding: 1vh;
-    border-radius: 20px;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 0.2rem;
+	border: 5px solid black;
+	background: black;
+	padding: 1vh;
+	border-radius: 20px;
 
-    position: fixed;
-    width: 45vh;
-    height: 70vh;
-    margin: 5% auto;
-    /* Will not center vertically and won't work in IE6/7. */
-    left: 0;
-    right: 0;   
+	position: fixed;
+	width: 45vh;
+	height: 70vh;
+	margin: 5% auto;
+	/* Will not center vertically and won't work in IE6/7. */
+	left: 0;
+	right: 0;
 }
 .textfield {
-    position: relative;
-    padding: 3vh;
+	position: relative;
+	padding: 3vh;
 }
 
 .span2col {
-    grid-column: span 2;
+	grid-column: span 2;
 }
 
 .span4col {
-    grid-column: span 4;
+	grid-column: span 4;
 }
 
 button {
-    border: 0.1rem solid black;
-    border-radius: 50%;
-    background: hsl(0, 0%, 41%);
-    color: white;
-    font-size: 2rem;
-    text-align: center;
-    align-items: center;
-    align-content: center;
-    transition: filter 0.25s;
-    transition-timing-function: ease-out;
-    
+	border: 0.1rem solid black;
+	border-radius: 50%;
+	background: hsl(0, 0%, 41%);
+	color: white;
+	font-size: 2rem;
+	text-align: center;
+	align-items: center;
+	align-content: center;
+	transition: filter 0.25s;
+	transition-timing-function: ease-out;
 }
 
 button:focus {
-    outline: none;
+	outline: none;
 }
 
 /* change to javascript and also get for key input (add to get functions!
 --> on key or click get id and add hl class to button */
 button:active {
-filter: brightness(130%);
+	filter: brightness(130%);
 }
 
 .orange {
-background: #ff9e0b
+	background: #ff9e0b;
 }
 
 .dark {
- background: #383838
+	background: #383838;
 }
 
 .notround {
-    border-radius: 36px;
+	border-radius: 36px;
 }
 
 .output {
-    padding: 1vh;
-    color: white;
-    font-size: 4.2rem;
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
+	padding: 1vh;
+	color: white;
+	font-size: 4.2rem;
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
 }
