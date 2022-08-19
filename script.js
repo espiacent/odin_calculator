@@ -1,8 +1,8 @@
 // global variables
-window.value = '';
-window.op = '';
-window.num1 = '';
-window.num2 = '';
+window.currentValue = '';
+window.cachedValue = '';
+window.operator = '';
+// window.secondOperation = false;
 
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
@@ -17,21 +17,36 @@ function getKey(e) {
 
 // 2: Click
 function getClick(e) {
+    // define arrays to get keys (in groups) 
+    const numbKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const calcKeys = ['plus', 'minus', 'mult', 'divide', 'equals'];
+    const otherKeys = ['percent', 'clear', 'neg', 'comma'];
     // set Clear Button
     const clearButton = document.getElementById('clear');
     clearButton.textContent = 'C';
     // define arrays for check input
-    const numberKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const calcKeys = ['plus', 'minus', 'mult', 'divide', 'equals'];
-    const otherKeys = ['percent', 'clear', 'neg', 'comma'];
     const position = (document.elementFromPoint(e.clientX, e.clientY));
     const buttonValue = position.id;
     // split inputs in three categories (numbers, operators, other) with subcategories for all inputs
-    if (buttonValue in numberKeys) {
+    if (numbKeys.includes(buttonValue)) {
         fillDisplayNum(buttonValue);
     } if (calcKeys.includes(buttonValue)) {
-        return;
-    } if (otherKeys.includes(buttonValue)) {
+        switch (buttonValue) {
+            case 'plus':
+                console.log('plus')
+                window.operator = 'plus';
+                window.cachedValue = window.currentValue;
+                window.currentValue = '';
+                break;
+            case 'equals':
+                console.log('equals')
+                mainOperator(window.operator, window.cachedValue, window.currentValue);
+                break;
+            default:
+                return;
+        }
+    }
+    if (otherKeys.includes(buttonValue)) {
         switch (buttonValue) {
             case 'clear':
                 clearOutput();
@@ -41,52 +56,65 @@ function getClick(e) {
             default:
                 return;
         }
-    } else {
-        return;
     }
 }
 
 // output field function
 function fillDisplayNum(buttonValue) {
     // add value to global number variable
-    window.value += buttonValue;
+    window.currentValue += buttonValue;
     // limit number length in output field so there is no overlay
-    let checkLength = window.value;
+    let checkLength = window.currentValue;
     if (checkLength.length > 10) {
         return;
     }
     // check for double leading zero and remove if necessary
-    let floatNum = parseFloat(window.value);
+    let floatNum = parseFloat(window.currentValue);
     if (floatNum % 1 == 0) {
         floatNum.toFixed(0);
-        window.value = floatNum;
+        window.currentValue = floatNum;
     } else {
         floatNum.toFixed(1);
-        window.value = floatNum;
+        window.currentValue = floatNum;
     }
     // new global variable to output
     const display = document.querySelector('.output');
-    display.textContent = `${window.value}`;
+    display.textContent = `${window.currentValue}`;
 }
 
 // function to clear output field
 function clearOutput() {
+    console.log('clearing')
     // clear all global variables
-    window.value = '0';
-    window.op = '';
-    window.num1 = '';
-    window.num2 = '';
+    window.currentValue = '0';
+    window.cachedValue = '';
+    window.operator = '';
+    // window.secondOperation = false;
     //clear output field
     const display = document.querySelector('.output');
-    display.textContent = `${window.value}`;
+    display.textContent = `${window.currentValue}`;
     // reset Clear Button
     const clearButton = document.getElementById('clear');
     clearButton.textContent = 'AC';
 }
 
+function mainOperator(op, num1, num2) {
+    if (op == 'plus') {
+        console.log('operation plus')
+        Add(num1, num2);
+    }
+}
+
 // calculation functions
 function Add(num1, num2) {
-    return num1 + num2;
+    num1 = parseFloat(num1)
+    num2 = parseFloat(num2)
+    sum = num1 + num2
+    result = sum.toFixed();
+    console.log('adding')
+    window.currentValue = result;
+    const display = document.querySelector('.output');
+    display.textContent = `${window.currentValue}`;
 }
 
 function Sub(num1, num2) {
