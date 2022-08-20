@@ -4,8 +4,9 @@ window.currentResult = '';
 window.cachedResult = '';
 window.firstValue = '';
 window.secondValue = '';
-window.operator = '';
+window.operation = '';
 window.dotApplied = false;
+window.secondOperator = false;
 
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
@@ -34,7 +35,9 @@ function getClick(e) {
         switch (buttonValue) {
             case 'plus':
                 console.log('plus')
-                window.operator = 'plus';
+                window.operation = 'plus';
+                window.firstValue = window.displayValue;
+                window.secondOperator = true;
                 break;
             case 'minus':
                 console.log('minus')
@@ -42,6 +45,7 @@ function getClick(e) {
                 break;
             case 'equals':
                 console.log('equals')
+                mainOperation(window.operation);
                 break;
             default:
                 return;
@@ -74,25 +78,42 @@ function getClick(e) {
 
 // output field function
 function fillDisplayNum(buttonValue) {
-    // add value to global number variable
-    window.displayValue += buttonValue;
-    // limit number length in output field so there is no overlay
-    let checkLength = window.displayValue;
-    if (checkLength.length > 10) {
+    if (window.secondOperator == false) {
+        console.log('input1')
+
+        // add value to global number variable
+        window.displayValue += buttonValue;
+        // limit number length in output field so there is no overlay
+        let checkLength = window.displayValue;
+        if (checkLength.length > 10) {
+            return;
+        }
+        // check for double leading zero and remove if necessary
+        let floatNum = parseFloat(window.displayValue);
+        if (floatNum % 1 == 0) {
+            floatNum.toFixed(0);
+            window.displayValue = floatNum;
+        } else {
+            floatNum.toFixed(1);
+            window.displayValue = floatNum;
+        }
+        // new global variable to output
+        const display = document.querySelector('.output');
+        display.textContent = `${window.displayValue}`;
+    } else {
+        console.log('input2')
+        window.secondOperator = false;
+        window.displayValue = buttonValue;
+        // limit number length in output field so there is no overlay
+        let checkLength = window.displayValue;
+        if (checkLength.length > 10) {
+            return;
+        }
+        // new global variable to output
+        const display = document.querySelector('.output');
+        display.textContent = `${window.displayValue}`;
         return;
     }
-    // check for double leading zero and remove if necessary
-    let floatNum = parseFloat(window.displayValue);
-    if (floatNum % 1 == 0) {
-        floatNum.toFixed(0);
-        window.displayValue = floatNum;
-    } else {
-        floatNum.toFixed(1);
-        window.displayValue = floatNum;
-    }
-    // new global variable to output
-    const display = document.querySelector('.output');
-    display.textContent = `${window.displayValue}`;
 }
 
 // function to clear output field
@@ -121,11 +142,12 @@ function clearLast() {
     display.textContent = `${window.displayValue}`;
 }
 
-function mainOperator(op, num1, num2) {
+function mainOperation(op) {
     if (op == 'plus') {
         console.log('operation plus')
         window.dotApplied = false;
-        Add(num1, num2);
+        window.operation = '';
+        Add(window.firstValue, window.displayValue);
     }
     if (op == 'minus') {
         console.log('operation minus')
@@ -155,9 +177,10 @@ function Add(num1, num2) {
     sum = num1 + num2
     result = sum.toFixed();
     console.log('adding')
-    window.currentValue = result;
+    window.firstValue = result;
+    window.displayValue = result;
     const display = document.querySelector('.output');
-    display.textContent = `${window.currentValue}`;
+    display.textContent = result;
 }
 
 function Sub(num1, num2) {
