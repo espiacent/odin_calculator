@@ -7,7 +7,7 @@ window.operator = '';
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
 buttons.forEach(button => button.addEventListener('click', getClick));
-document.addEventListener('keydown', getKey);
+// document.addEventListener('keydown', getKey);
 
 //input functions
 // 1: Button
@@ -20,10 +20,7 @@ function getClick(e) {
     // define arrays to get keys (in groups) 
     const numbKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const calcKeys = ['plus', 'minus', 'mult', 'divide', 'equals'];
-    const otherKeys = ['percent', 'clear', 'neg', 'comma'];
-    // set Clear Button
-    const clearButton = document.getElementById('clear');
-    clearButton.textContent = 'C';
+    const otherKeys = ['percent', 'allclear', 'clear', 'neg', 'comma'];
     // define arrays for check input
     const position = (document.elementFromPoint(e.clientX, e.clientY));
     const buttonValue = position.id;
@@ -48,8 +45,8 @@ function getClick(e) {
     }
     if (otherKeys.includes(buttonValue)) {
         switch (buttonValue) {
-            case 'clear':
-                clearOutput();
+            case 'allclear':
+                clearAll();
                 break;
             case 'comma':
                 break;
@@ -83,19 +80,15 @@ function fillDisplayNum(buttonValue) {
 }
 
 // function to clear output field
-function clearOutput() {
+function clearAll() {
     console.log('clearing')
     // clear all global variables
     window.currentValue = '0';
     window.cachedValue = '';
     window.operator = '';
-    // window.secondOperation = false;
     //clear output field
     const display = document.querySelector('.output');
     display.textContent = `${window.currentValue}`;
-    // reset Clear Button
-    const clearButton = document.getElementById('clear');
-    clearButton.textContent = 'AC';
 }
 
 function mainOperator(op, num1, num2) {
