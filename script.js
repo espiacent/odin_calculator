@@ -7,8 +7,8 @@ window.secondValue = '';
 window.operation = '';
 window.dotApplied = false;
 window.secondOperator = false;
-window.plusAgain == false;
-window.minusAgain == false;
+window.plusAgain = false;
+window.minusAgain = false;
 window.multAgain = true;
 window.divideAgain = true;
 
@@ -39,13 +39,15 @@ function getClick(e) {
         switch (buttonValue) {
             case 'plus':
                 if (window.plusAgain == true) {
+                    window.minusAgain == false;
                     console.log('plus again')
                     window.operation = 'plus';
-                    Add(window.firstValue, window.displayValue);
+                    Add(window.firstValue, window.secondValue);
                     window.plusAgain == false;
                     window.secondOperator = true;
                     break;
                 } else {
+                    window.minusAgain == false;
                     console.log('plus')
                     window.operation = 'plus';
                     window.firstValue = window.displayValue;
@@ -55,13 +57,15 @@ function getClick(e) {
                 }
             case 'minus':
                 if (window.minusAgain == true) {
+                    window.plusAgain == false;
                     console.log('minus again')
                     window.operation = 'minus';
-                    Sub(window.firstValue, window.displayValue);
+                    Sub(window.firstValue, window.secondValue);
                     window.minusAgain == false;
                     window.secondOperator = true;
                     break;
                 } else {
+                    window.plusAgain == false;
                     console.log('minus')
                     window.operation = 'minus';
                     window.firstValue = window.displayValue;
@@ -71,6 +75,10 @@ function getClick(e) {
                 }
             case 'equals':
                 console.log('equals')
+                window.plusAgain = false;
+                window.minusAgain = false;
+                window.multAgain = false;
+                window.divideAgain = false;
                 mainOperation(window.operation);
                 break;
             default:
@@ -130,6 +138,7 @@ function fillDisplayNum(buttonValue) {
         console.log('input2')
         window.secondOperator = false;
         window.displayValue = buttonValue;
+        window.secondValue = buttonValue;
         // limit number length in output field so there is no overlay
         let checkLength = window.displayValue;
         if (checkLength.length > 10) {
