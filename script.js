@@ -7,6 +7,10 @@ window.secondValue = '';
 window.operation = '';
 window.dotApplied = false;
 window.secondOperator = false;
+window.plusAgain == false;
+window.minusAgain == false;
+window.multAgain = true;
+window.divideAgain = true;
 
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
@@ -34,15 +38,37 @@ function getClick(e) {
     } if (calcKeys.includes(buttonValue)) {
         switch (buttonValue) {
             case 'plus':
-                console.log('plus')
-                window.operation = 'plus';
-                window.firstValue = window.displayValue;
-                window.secondOperator = true;
-                break;
+                if (window.plusAgain == true) {
+                    console.log('plus again')
+                    window.operation = 'plus';
+                    Add(window.firstValue, window.displayValue);
+                    window.plusAgain == false;
+                    window.secondOperator = true;
+                    break;
+                } else {
+                    console.log('plus')
+                    window.operation = 'plus';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.plusAgain = true;
+                    break;
+                }
             case 'minus':
-                console.log('minus')
-                window.operator = 'minus';
-                break;
+                if (window.minusAgain == true) {
+                    console.log('minus again')
+                    window.operation = 'minus';
+                    Sub(window.firstValue, window.displayValue);
+                    window.minusAgain == false;
+                    window.secondOperator = true;
+                    break;
+                } else {
+                    console.log('minus')
+                    window.operation = 'minus';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.minusAgain = true;
+                    break;
+                }
             case 'equals':
                 console.log('equals')
                 mainOperation(window.operation);
@@ -127,6 +153,10 @@ function clearAll() {
     window.currentValue = '';
     window.operator = '';
     window.dotApplied = false;
+    window.plusAgain = false;
+    window.minusAgain == false;
+    window.multAgain = true;
+    window.divideAgain = true;
     //clear output field
     const display = document.querySelector('.output');
     display.textContent = `${window.displayValue}`;
@@ -152,7 +182,8 @@ function mainOperation(op) {
     if (op == 'minus') {
         console.log('operation minus')
         window.dotApplied = false;
-        Sub(num1, num2);
+        window.operation = '';
+        Sub(window.firstValue, window.displayValue);
     }
     if (op == 'mult') {
         console.log('operation mult')
@@ -187,7 +218,12 @@ function Sub(num1, num2) {
     num1 = parseFloat(num1)
     num2 = parseFloat(num2)
     sum = num1 - num2;
-    return;
+    result = sum.toFixed();
+    console.log('subtracting')
+    window.firstValue = result;
+    window.displayValue = result;
+    const display = document.querySelector('.output');
+    display.textContent = result;
 }
 
 function Mult(num1, num2) {
