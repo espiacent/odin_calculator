@@ -9,8 +9,8 @@ window.dotApplied = false;
 window.secondOperator = false;
 window.plusAgain = false;
 window.minusAgain = false;
-window.multAgain = true;
-window.divideAgain = true;
+window.multAgain = false;
+window.divideAgain = false;
 
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
@@ -32,6 +32,7 @@ function getClick(e) {
     // define arrays for check input
     const position = (document.elementFromPoint(e.clientX, e.clientY));
     const buttonValue = position.id;
+    console.log(position.id)
     // split inputs in three categories (numbers, operators, other) with subcategories for all inputs
     if (numbKeys.includes(buttonValue)) {
         fillDisplayNum(buttonValue);
@@ -71,6 +72,42 @@ function getClick(e) {
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
                     window.minusAgain = true;
+                    break;
+                }
+            case 'mult':
+                if (window.multAgain == true) {
+                    window.multAgain == false;
+                    console.log('mult again')
+                    window.operation = 'mult';
+                    Mult(window.firstValue, window.secondValue);
+                    window.multAgain == false;
+                    window.secondOperator = true;
+                    break;
+                } else {
+                    window.multAgain == false;
+                    console.log('mult')
+                    window.operation = 'mult';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.multAgain = true;
+                    break;
+                }
+            case 'divide':
+                if (window.divideAgain == true) {
+                    window.divideAgain == false;
+                    console.log('divide again')
+                    window.operation = 'divide';
+                    Div(window.firstValue, window.secondValue);
+                    window.divideAgain == false;
+                    window.secondOperator = true;
+                    break;
+                } else {
+                    window.divideAgain == false;
+                    console.log('divide')
+                    window.operation = 'divide';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.divideAgain = true;
                     break;
                 }
             case 'equals':
@@ -163,9 +200,9 @@ function clearAll() {
     window.operator = '';
     window.dotApplied = false;
     window.plusAgain = false;
-    window.minusAgain == false;
-    window.multAgain = true;
-    window.divideAgain = true;
+    window.minusAgain = false;
+    window.multAgain = false;
+    window.divideAgain = false;
     //clear output field
     const display = document.querySelector('.output');
     display.textContent = `${window.displayValue}`;
@@ -197,12 +234,14 @@ function mainOperation(op) {
     if (op == 'mult') {
         console.log('operation mult')
         window.dotApplied = false;
-        Mult(num1, num2);
+        window.operation = '';
+        Mult(window.firstValue, window.displayValue);
     }
     if (op == 'divide') {
         console.log('operation divide')
         window.dotApplied = false;
-        Div(num1, num2);
+        window.operation = '';
+        Div(window.firstValue, window.displayValue);
     }
     if (op == 'neg') {
         console.log('operation negative')
@@ -240,7 +279,10 @@ function Mult(num1, num2) {
     num2 = parseFloat(num2)
     sum = num1 * num2;
     result = sum.toFixed();
-    return;
+    window.firstValue = result;
+    window.displayValue = result;
+    const display = document.querySelector('.output');
+    display.textContent = result;
 }
 
 function Div(num1, num2) {
@@ -248,7 +290,10 @@ function Div(num1, num2) {
     num2 = parseFloat(num2)
     sum = num1 / num2;
     result = sum.toFixed();
-    return;
+    window.firstValue = result;
+    window.displayValue = result;
+    const display = document.querySelector('.output');
+    display.textContent = result;
 }
 
 function Neg(num1) {
