@@ -27,8 +27,8 @@ function getKey(e) {
 function getClick(e) {
     // define arrays to get keys (in groups) 
     const numbKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const calcKeys = ['plus', 'minus', 'mult', 'divide', 'equals'];
-    const otherKeys = ['allclear', 'clear', 'neg', 'dot'];
+    const calcKeys = ['plus', 'minus', 'mult', 'divide', 'equals', 'neg'];
+    const otherKeys = ['allclear', 'clear', 'dot'];
     // define arrays for check input
     const position = (document.elementFromPoint(e.clientX, e.clientY));
     const buttonValue = position.id;
@@ -110,6 +110,10 @@ function getClick(e) {
                     window.divideAgain = true;
                     break;
                 }
+            case 'neg':
+                console.log('case neg')
+                Neg(window.displayValue);
+                break;
             case 'equals':
                 console.log('equals')
                 window.plusAgain = false;
@@ -254,51 +258,80 @@ function Add(num1, num2) {
     num1 = parseFloat(num1)
     num2 = parseFloat(num2)
     sum = num1 + num2
-    result = sum.toFixed();
+    result = sum.toString()
     console.log('adding')
     window.firstValue = result;
     window.displayValue = result;
     const display = document.querySelector('.output');
-    display.textContent = result;
+    if (result.length > 10) {
+        result = result.substring(0, 10);
+        display.textContent = result;
+    } else {
+        display.textContent = result;
+    }
 }
 
 function Sub(num1, num2) {
     num1 = parseFloat(num1)
     num2 = parseFloat(num2)
     sum = num1 - num2;
-    result = sum.toFixed();
+    result = sum.toString()
     console.log('subtracting')
     window.firstValue = result;
     window.displayValue = result;
     const display = document.querySelector('.output');
-    display.textContent = result;
+    if (result.length > 10) {
+        result = result.substring(0, 10);
+        display.textContent = result;
+    } else {
+        display.textContent = result;
+    }
 }
 
 function Mult(num1, num2) {
     num1 = parseFloat(num1)
     num2 = parseFloat(num2)
     sum = num1 * num2;
-    result = sum.toFixed();
+    result = sum.toString()
     window.firstValue = result;
     window.displayValue = result;
     const display = document.querySelector('.output');
-    display.textContent = result;
+    if (result.length > 10) {
+        result = result.substring(0, 10);
+        display.textContent = result;
+    } else {
+        display.textContent = result;
+    }
 }
 
 function Div(num1, num2) {
     num1 = parseFloat(num1)
     num2 = parseFloat(num2)
     sum = num1 / num2;
-    result = sum.toFixed();
+    result = sum.toString()
     window.firstValue = result;
     window.displayValue = result;
     const display = document.querySelector('.output');
-    display.textContent = result;
+    if (result.length > 10) {
+        result = result.substring(0, 10);
+        display.textContent = result;
+    } else {
+        display.textContent = result;
+    }
 }
 
 function Neg(num1) {
-    num1 = parseFloat(num)
+    console.log('negating')
+    num1 = parseFloat(num1)
     sum = num1 * -1;
-    result = sum.toFixed();
-    return;
+    result = sum.toString();
+    window.firstValue = result;
+    window.displayValue = result;
+    const display = document.querySelector('.output');
+    if (result.length > 10) {
+        result = result.substring(0, 10);
+        display.textContent = result;
+    } else {
+        display.textContent = result;
+    };
 }
