@@ -15,12 +15,155 @@ window.divideAgain = false;
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
 buttons.forEach(button => button.addEventListener('click', getClick));
-// document.addEventListener('keydown', getKey);
+document.addEventListener('keyup', getKey);
+document.addEventListener('keydown', getWhich);
+
 
 //input functions
 // 1: Button
+function getWhich(e) {
+    // console.log(e.which);
+}
 function getKey(e) {
-    return;
+    // define arrays to get keys (in groups) 
+    const numbKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const calcKeys = ['+', '-', '*', '/', '=', 'n', 'Enter'];
+    const otherKeys = ['Backspace', 'c', 'Escape', 'a', '.'];
+    // define arrays for check input
+    let buttonValue = e.key;
+    console.log(buttonValue);
+    // split inputs in three categories (numbers, operators, other) with subcategories for all inputs
+    if (numbKeys.includes(buttonValue)) {
+        fillDisplayNum(buttonValue);
+    } if (calcKeys.includes(buttonValue)) {
+        switch (buttonValue) {
+            case '+':
+                if (window.plusAgain == true) {
+                    window.minusAgain == false;
+                    console.log('plus again')
+                    window.operation = 'plus';
+                    Add(window.firstValue, window.secondValue);
+                    window.plusAgain == false;
+                    window.secondOperator = true;
+                    window.dotApplied = false;
+                    break;
+                } else {
+                    window.minusAgain == false;
+                    console.log('plus')
+                    window.operation = 'plus';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.plusAgain = true;
+                    window.dotApplied = false;
+                    break;
+                }
+            case '-':
+                if (window.minusAgain == true) {
+                    window.plusAgain == false;
+                    console.log('minus again')
+                    window.operation = 'minus';
+                    Sub(window.firstValue, window.secondValue);
+                    window.minusAgain == false;
+                    window.secondOperator = true;
+                    window.dotApplied = false;
+                    break;
+                } else {
+                    window.plusAgain == false;
+                    console.log('minus')
+                    window.operation = 'minus';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.minusAgain = true;
+                    window.dotApplied = false;
+                    break;
+                }
+            case '*':
+                if (window.multAgain == true) {
+                    window.multAgain == false;
+                    console.log('mult again')
+                    window.operation = 'mult';
+                    Mult(window.firstValue, window.secondValue);
+                    window.multAgain == false;
+                    window.secondOperator = true;
+                    window.dotApplied = false;
+                    break;
+                } else {
+                    window.multAgain == false;
+                    console.log('mult')
+                    window.operation = 'mult';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.multAgain = true;
+                    window.dotApplied = false;
+                    break;
+                }
+            case '/':
+                if (window.divideAgain == true) {
+                    window.divideAgain == false;
+                    console.log('divide again')
+                    window.operation = 'divide';
+                    Div(window.firstValue, window.secondValue);
+                    window.divideAgain == false;
+                    window.secondOperator = true;
+                    window.dotApplied = false;
+                    break;
+                } else {
+                    window.divideAgain == false;
+                    console.log('divide')
+                    window.operation = 'divide';
+                    window.firstValue = window.displayValue;
+                    window.secondOperator = true;
+                    window.divideAgain = true;
+                    window.dotApplied = false;
+                    break;
+                }
+            case 'n':
+                console.log('case neg')
+                Neg(window.displayValue);
+                break;
+            case '=':
+                console.log('equals')
+                clearOperators()
+                mainOperation(window.operation);
+                break;
+            case 'Enter':
+                console.log('equals')
+                clearOperators()
+                mainOperation(window.operation);
+                break;
+            default:
+                return;
+        }
+    }
+    if (otherKeys.includes(buttonValue)) {
+        switch (buttonValue) {
+            case 'Escape':
+                clearAll();
+                break;
+            case 'a':
+                clearAll();
+                break;
+            case 'Backspace':
+                clearLast();
+                break;
+            case 'c':
+                clearLast();
+                break;
+            case '.':
+                if (window.dotApplied == false) {
+                    console.log(buttonValue)
+                    window.displayValue += '.';
+                    const display = document.querySelector('.output');
+                    display.textContent = `${window.displayValue}`;
+                    window.dotApplied = true;
+                    break;
+                } else {
+                    break;
+                }
+            default:
+                return;
+        }
+    }
 }
 
 // 2: Click
@@ -46,6 +189,7 @@ function getClick(e) {
                     Add(window.firstValue, window.secondValue);
                     window.plusAgain == false;
                     window.secondOperator = true;
+                    window.dotApplied = false;
                     break;
                 } else {
                     window.minusAgain == false;
@@ -54,6 +198,7 @@ function getClick(e) {
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
                     window.plusAgain = true;
+                    window.dotApplied = false;
                     break;
                 }
             case 'minus':
@@ -64,6 +209,7 @@ function getClick(e) {
                     Sub(window.firstValue, window.secondValue);
                     window.minusAgain == false;
                     window.secondOperator = true;
+                    window.dotApplied = false;
                     break;
                 } else {
                     window.plusAgain == false;
@@ -72,6 +218,7 @@ function getClick(e) {
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
                     window.minusAgain = true;
+                    window.dotApplied = false;
                     break;
                 }
             case 'mult':
@@ -82,6 +229,7 @@ function getClick(e) {
                     Mult(window.firstValue, window.secondValue);
                     window.multAgain == false;
                     window.secondOperator = true;
+                    window.dotApplied = false;
                     break;
                 } else {
                     window.multAgain == false;
@@ -90,6 +238,7 @@ function getClick(e) {
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
                     window.multAgain = true;
+                    window.dotApplied = false;
                     break;
                 }
             case 'divide':
@@ -100,6 +249,7 @@ function getClick(e) {
                     Div(window.firstValue, window.secondValue);
                     window.divideAgain == false;
                     window.secondOperator = true;
+                    window.dotApplied = false;
                     break;
                 } else {
                     window.divideAgain == false;
@@ -108,6 +258,7 @@ function getClick(e) {
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
                     window.divideAgain = true;
+                    window.dotApplied = false;
                     break;
                 }
             case 'neg':
@@ -116,10 +267,7 @@ function getClick(e) {
                 break;
             case 'equals':
                 console.log('equals')
-                window.plusAgain = false;
-                window.minusAgain = false;
-                window.multAgain = false;
-                window.divideAgain = false;
+                clearOperators()
                 mainOperation(window.operation);
                 break;
             default:
@@ -202,11 +350,7 @@ function clearAll() {
     window.cachedValue = '';
     window.currentValue = '';
     window.operator = '';
-    window.dotApplied = false;
-    window.plusAgain = false;
-    window.minusAgain = false;
-    window.multAgain = false;
-    window.divideAgain = false;
+    clearOperators()
     //clear output field
     const display = document.querySelector('.output');
     display.textContent = `${window.displayValue}`;
@@ -334,4 +478,12 @@ function Neg(num1) {
     } else {
         display.textContent = result;
     };
+}
+
+function clearOperators() {
+    window.plusAgain = false;
+    window.minusAgain = false;
+    window.multAgain = false;
+    window.divideAgain = false;
+    window.dotApplied = false;
 }
