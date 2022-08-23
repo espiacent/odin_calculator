@@ -58,6 +58,10 @@ button:active {
 filter: brightness(130%);
 }
 
+.hl {
+    filter: brightness(130%);
+}
+
 .orange {
 background: #ff9e0b
 }

@@ -11,19 +11,60 @@ window.plusAgain = false;
 window.minusAgain = false;
 window.multAgain = false;
 window.divideAgain = false;
+window.shiftKey = false;
+
 
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
-buttons.forEach(button => button.addEventListener('click', getClick));
-document.addEventListener('keyup', getKey);
+buttons.forEach(button => button.addEventListener('mouseup', getClick));
+document.addEventListener('keyup', getKey, highLightButton);
 document.addEventListener('keydown', getWhich);
+document.addEventListener('keydown', highLightButton);
 
+
+function getWhich(e) {
+    console.log(e.which);
+    if (e.which == 16) {
+        console.log('shift true')
+        window.shiftKey = true;
+    }
+}
+
+const keys = document.querySelectorAll('.button');
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+function highLightButton(e) {
+    const allowedKeys = [49, 50, 51, 52, 53, 54, 56, 57, 8, 27, 40, 190, 189, 187, 221];
+    if (window.shiftKey == true && e.which == 55) {
+        const key = document.querySelector(`.button[data-key="divide"]`);
+        key.classList.add('hl');
+        window.shiftKey = false;
+    } if (window.shiftKey == true && e.which == 48) {
+        const key = document.querySelector(`.button[data-key="equals"]`);
+        key.classList.add('hl');
+        window.shiftKey = false;
+    } else if (window.shiftKey == false && e.which == 55) {
+        const key = document.querySelector(`.button[data-key="seven"]`);
+        key.classList.add('hl');
+    } else if (window.shiftKey == false && e.which == 48) {
+        const key = document.querySelector(`.button[data-key="zero"]`);
+        key.classList.add('hl');
+    } else {
+        if (allowedKeys.includes(e.which)) {
+            const key = document.querySelector(`.button[data-key="${e.which}"]`);
+            key.classList.add('hl');
+            window.shiftKey = false;
+        }
+    }
+}
+
+function removeTransition(e) {
+    if (e.propertyName != 'filter') return;
+    this.classList.remove('hl');
+}
 
 //input functions
 // 1: Button
-function getWhich(e) {
-    // console.log(e.which);
-}
 function getKey(e) {
     // define arrays to get keys (in groups) 
     const numbKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -31,7 +72,6 @@ function getKey(e) {
     const otherKeys = ['Backspace', 'c', 'Escape', 'a', '.'];
     // define arrays for check input
     let buttonValue = e.key;
-    console.log(buttonValue);
     // split inputs in three categories (numbers, operators, other) with subcategories for all inputs
     if (numbKeys.includes(buttonValue)) {
         fillDisplayNum(buttonValue);
@@ -40,7 +80,6 @@ function getKey(e) {
             case '+':
                 if (window.plusAgain == true) {
                     window.minusAgain == false;
-                    console.log('plus again')
                     window.operation = 'plus';
                     Add(window.firstValue, window.secondValue);
                     window.plusAgain == false;
@@ -49,7 +88,6 @@ function getKey(e) {
                     break;
                 } else {
                     window.minusAgain == false;
-                    console.log('plus')
                     window.operation = 'plus';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -60,7 +98,6 @@ function getKey(e) {
             case '-':
                 if (window.minusAgain == true) {
                     window.plusAgain == false;
-                    console.log('minus again')
                     window.operation = 'minus';
                     Sub(window.firstValue, window.secondValue);
                     window.minusAgain == false;
@@ -69,7 +106,6 @@ function getKey(e) {
                     break;
                 } else {
                     window.plusAgain == false;
-                    console.log('minus')
                     window.operation = 'minus';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -80,7 +116,6 @@ function getKey(e) {
             case '*':
                 if (window.multAgain == true) {
                     window.multAgain == false;
-                    console.log('mult again')
                     window.operation = 'mult';
                     Mult(window.firstValue, window.secondValue);
                     window.multAgain == false;
@@ -89,7 +124,6 @@ function getKey(e) {
                     break;
                 } else {
                     window.multAgain == false;
-                    console.log('mult')
                     window.operation = 'mult';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -100,7 +134,6 @@ function getKey(e) {
             case '/':
                 if (window.divideAgain == true) {
                     window.divideAgain == false;
-                    console.log('divide again')
                     window.operation = 'divide';
                     Div(window.firstValue, window.secondValue);
                     window.divideAgain == false;
@@ -109,7 +142,6 @@ function getKey(e) {
                     break;
                 } else {
                     window.divideAgain == false;
-                    console.log('divide')
                     window.operation = 'divide';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -118,16 +150,13 @@ function getKey(e) {
                     break;
                 }
             case 'n':
-                console.log('case neg')
                 Neg(window.displayValue);
                 break;
             case '=':
-                console.log('equals')
                 clearOperators()
                 mainOperation(window.operation);
                 break;
             case 'Enter':
-                console.log('equals')
                 clearOperators()
                 mainOperation(window.operation);
                 break;
@@ -151,7 +180,6 @@ function getKey(e) {
                 break;
             case '.':
                 if (window.dotApplied == false) {
-                    console.log(buttonValue)
                     window.displayValue += '.';
                     const display = document.querySelector('.output');
                     display.textContent = `${window.displayValue}`;
@@ -175,7 +203,6 @@ function getClick(e) {
     // define arrays for check input
     const position = (document.elementFromPoint(e.clientX, e.clientY));
     const buttonValue = position.id;
-    console.log(position.id)
     // split inputs in three categories (numbers, operators, other) with subcategories for all inputs
     if (numbKeys.includes(buttonValue)) {
         fillDisplayNum(buttonValue);
@@ -184,7 +211,6 @@ function getClick(e) {
             case 'plus':
                 if (window.plusAgain == true) {
                     window.minusAgain == false;
-                    console.log('plus again')
                     window.operation = 'plus';
                     Add(window.firstValue, window.secondValue);
                     window.plusAgain == false;
@@ -193,7 +219,6 @@ function getClick(e) {
                     break;
                 } else {
                     window.minusAgain == false;
-                    console.log('plus')
                     window.operation = 'plus';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -204,7 +229,6 @@ function getClick(e) {
             case 'minus':
                 if (window.minusAgain == true) {
                     window.plusAgain == false;
-                    console.log('minus again')
                     window.operation = 'minus';
                     Sub(window.firstValue, window.secondValue);
                     window.minusAgain == false;
@@ -213,7 +237,6 @@ function getClick(e) {
                     break;
                 } else {
                     window.plusAgain == false;
-                    console.log('minus')
                     window.operation = 'minus';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -224,7 +247,6 @@ function getClick(e) {
             case 'mult':
                 if (window.multAgain == true) {
                     window.multAgain == false;
-                    console.log('mult again')
                     window.operation = 'mult';
                     Mult(window.firstValue, window.secondValue);
                     window.multAgain == false;
@@ -233,7 +255,6 @@ function getClick(e) {
                     break;
                 } else {
                     window.multAgain == false;
-                    console.log('mult')
                     window.operation = 'mult';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -244,7 +265,6 @@ function getClick(e) {
             case 'divide':
                 if (window.divideAgain == true) {
                     window.divideAgain == false;
-                    console.log('divide again')
                     window.operation = 'divide';
                     Div(window.firstValue, window.secondValue);
                     window.divideAgain == false;
@@ -253,7 +273,6 @@ function getClick(e) {
                     break;
                 } else {
                     window.divideAgain == false;
-                    console.log('divide')
                     window.operation = 'divide';
                     window.firstValue = window.displayValue;
                     window.secondOperator = true;
@@ -262,11 +281,9 @@ function getClick(e) {
                     break;
                 }
             case 'neg':
-                console.log('case neg')
                 Neg(window.displayValue);
                 break;
             case 'equals':
-                console.log('equals')
                 clearOperators()
                 mainOperation(window.operation);
                 break;
@@ -284,7 +301,6 @@ function getClick(e) {
                 break;
             case 'dot':
                 if (window.dotApplied == false) {
-                    console.log(buttonValue)
                     window.displayValue += '.';
                     const display = document.querySelector('.output');
                     display.textContent = `${window.displayValue}`;
@@ -302,7 +318,6 @@ function getClick(e) {
 // output field function
 function fillDisplayNum(buttonValue) {
     if (window.secondOperator == false) {
-        console.log('input1')
 
         // add value to global number variable
         window.displayValue += buttonValue;
@@ -324,7 +339,6 @@ function fillDisplayNum(buttonValue) {
         const display = document.querySelector('.output');
         display.textContent = `${window.displayValue}`;
     } else {
-        console.log('input2')
         window.secondOperator = false;
         window.displayValue = buttonValue;
         window.secondValue = buttonValue;
@@ -342,7 +356,6 @@ function fillDisplayNum(buttonValue) {
 
 // function to clear output field
 function clearAll() {
-    console.log('clearing all')
     // clear all global variables
     window.displayValue = '0';
     window.currentResult = '';
@@ -357,7 +370,6 @@ function clearAll() {
 }
 
 function clearLast() {
-    console.log('clearing last')
     // clear recent global variables
     window.currentValue = '';
     window.displayValue = '0';
@@ -368,31 +380,26 @@ function clearLast() {
 
 function mainOperation(op) {
     if (op == 'plus') {
-        console.log('operation plus')
         window.dotApplied = false;
         window.operation = '';
         Add(window.firstValue, window.displayValue);
     }
     if (op == 'minus') {
-        console.log('operation minus')
         window.dotApplied = false;
         window.operation = '';
         Sub(window.firstValue, window.displayValue);
     }
     if (op == 'mult') {
-        console.log('operation mult')
         window.dotApplied = false;
         window.operation = '';
         Mult(window.firstValue, window.displayValue);
     }
     if (op == 'divide') {
-        console.log('operation divide')
         window.dotApplied = false;
         window.operation = '';
         Div(window.firstValue, window.displayValue);
     }
     if (op == 'neg') {
-        console.log('operation negative')
         Neg(num);
     }
 }
@@ -403,7 +410,6 @@ function Add(num1, num2) {
     num2 = parseFloat(num2)
     sum = num1 + num2
     result = sum.toString()
-    console.log('adding')
     window.firstValue = result;
     window.displayValue = result;
     const display = document.querySelector('.output');
@@ -420,7 +426,6 @@ function Sub(num1, num2) {
     num2 = parseFloat(num2)
     sum = num1 - num2;
     result = sum.toString()
-    console.log('subtracting')
     window.firstValue = result;
     window.displayValue = result;
     const display = document.querySelector('.output');
@@ -465,7 +470,6 @@ function Div(num1, num2) {
 }
 
 function Neg(num1) {
-    console.log('negating')
     num1 = parseFloat(num1)
     sum = num1 * -1;
     result = sum.toString();
