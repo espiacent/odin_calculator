@@ -23,9 +23,7 @@ document.addEventListener('keydown', highLightButton);
 
 
 function getWhich(e) {
-    console.log(e.which);
     if (e.which == 16) {
-        console.log('shift true')
         window.shiftKey = true;
     }
 }
