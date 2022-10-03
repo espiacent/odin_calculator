@@ -13,14 +13,12 @@ window.multAgain = false;
 window.divideAgain = false;
 window.shiftKey = false;
 
-
 // event listeners
 const buttons = Array.from(document.querySelectorAll('.button'));
 buttons.forEach(button => button.addEventListener('mouseup', getClick));
 document.addEventListener('keyup', getKey, highLightButton);
 document.addEventListener('keydown', getWhich);
 document.addEventListener('keydown', highLightButton);
-
 
 function getWhich(e) {
     if (e.which == 16) {
